@@ -40,13 +40,17 @@ def search(grid, init, goal, cost):
     # modify code below
     # ----------------------------------------
     closed = [[0 for row in range(len(grid[0]))] for col in range(len(grid))]
+    expand = [[None for row in range(len(grid[0]))] for col in range(len(grid))]
+    output = [[' ' for row in range(len(grid[0]))] for col in range(len(grid))]
     closed[init[0]][init[1]] = 1
+    expand[init[0]][init[1]] = None
 
     x = init[0]
     y = init[1]
     g = 0
 
-    open = [[g, x, y]]
+    open = [[g, x, y, None]]
+    count = 0
 
     found = False  # flag that is set when search is complete
     resign = False  # flag set if we can't find expand
@@ -72,7 +76,23 @@ def search(grid, init, goal, cost):
                     if x2 >= 0 and x2 < len(grid) and y2 >= 0 and y2 < len(grid[0]):
                         if closed[x2][y2] == 0 and grid[x2][y2] == 0:
                             g2 = g + cost
-                            open.append([g2, x2, y2])
+                            open.append([g2, x2, y2, (x, y)])
+                            expand[x2][y2] = (x, y)
                             closed[x2][y2] = 1
+    if found:
+        last = (goal[0], goal[1])
+        next = expand[goal[0]][goal[1]]
+        output[goal[0]][goal[1]] = '*'
+        while next:
+            dir = [last[0] - next[0], last[1] - next[1]]
+            char = delta_name[delta.index(dir)]
+            output[next[0]][next[1]] = char
 
-    return expand  # make sure you return the shortest path
+            # Update last to our current next, and get a new next.
+            last = next
+            next = expand[last[0]][last[1]]
+
+
+    return output
+
+print search(grid, init, goal, cost)
