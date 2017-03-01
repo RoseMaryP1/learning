@@ -15,14 +15,6 @@ grid = [[0, 0, 1, 0, 0, 0],
         [0, 0, 1, 0, 1, 0],
         [0, 0, 1, 0, 1, 0],
         [0, 0, 1, 0, 1, 0]]
-
-
-grid = [[0, 1, 1, 1, 1],
-        [0, 1, 0, 0, 0],
-        [0, 0, 0, 1, 0],
-        [1, 1, 1, 1, 0],
-        [0, 0, 0, 1, 0]]
-
 init = [0, 0]
 goal = [len(grid) - 1, len(grid[0]) - 1]
 cost = 1
@@ -47,15 +39,13 @@ def search(grid, init, goal, cost):
     y = init[1]
     g = 0
 
-    open = [[g, x, y]]
-    expand[x][y] = 0
     count = 0
+    open = [[g, x, y]]
 
     found = False  # flag that is set when search is complete
     resign = False  # flag set if we can't find expand
 
     while not found and not resign:
-        count += 1
         if len(open) == 0:
             resign = True
         else:
@@ -66,7 +56,6 @@ def search(grid, init, goal, cost):
             y = next[2]
             g = next[0]
             expand[x][y] = count
-
             if x == goal[0] and y == goal[1]:
                 found = True
             else:
@@ -78,6 +67,7 @@ def search(grid, init, goal, cost):
                             g2 = g + cost
                             open.append([g2, x2, y2])
                             closed[x2][y2] = 1
+        count += 1
     return expand
 
 
