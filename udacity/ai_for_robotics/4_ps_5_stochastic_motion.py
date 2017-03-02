@@ -35,10 +35,63 @@ delta_name = ['^', '<', 'v', '>']  # Use these when creating your policy grid.
 #  Modify the function stochastic_value below
 # ---------------------------------------------
 
+
 def stochastic_value(grid, goal, cost_step, collision_cost, success_prob):
     failure_prob = (1.0 - success_prob) / 2.0  # Probability(stepping left) = prob(stepping right) = failure_prob
     value = [[collision_cost for col in range(len(grid[0]))] for row in range(len(grid))]
     policy = [[' ' for col in range(len(grid[0]))] for row in range(len(grid))]
+
+    wrong_actions = [[0, -1], [0, 1], # when up: left + right
+                     [1, 0], [0,1], # when left: down + up
+                     [1, 0], [0, 1], # when up: left + right
+                     [1, 0], [0, 1]] # when up: left + right
+
+    changed = True
+    value[goal[0]][goal[1]] = 0
+    policy[goal[0]][goal[1]] = '*'
+
+    def is_collision(pt):
+        if pt[0] < 0 or pt[0] > len(grid) - 1 or pt[1] < 0 or pt[1] > len(grid[0]) - 1:
+            return True
+        if grid[pt[0]][pt[1]] == 1:
+            return True
+        return False
+
+    while changed:
+        changed = False
+        for row in range(len(grid)):
+            for col in range(len(grid[0])):
+                if is_collision([row,col]):
+                     continue
+                for i in range(len(delta)):
+
+                    l_i = (i + 1) % 4
+                    r_i = (i - 1) % 4
+
+                    main = [row + delta[i][0], col + delta[i][1]]
+                    left = [row + delta[l_i][0], col + delta[l_i][1]]
+                    right = [row + delta[r_i][0], col + delta[r_i][1]]
+
+                    val = cost_step
+                    if is_collision(main):
+                        val += collision_cost * success_prob
+                    else:
+                        val += value[main[0]][main[1]] * success_prob
+
+                    if is_collision(left):
+                        val += collision_cost * failure_prob
+                    else:
+                        val += value[left[0]][left[1]] * failure_prob
+
+                    if is_collision(right):
+                        val += collision_cost * failure_prob
+                    else:
+                        val += value[right[0]][right[1]] * failure_prob
+
+                    if val < value[row][col]:
+                        value[row][col] = val
+                        policy[row][col] = delta_name[i]
+                        changed = True
 
     return value, policy
 
@@ -53,7 +106,7 @@ grid = [[0, 0, 0, 0],
         [0, 1, 1, 0]]
 goal = [0, len(grid[0]) - 1]  # Goal is in top right corner
 cost_step = 1
-collision_cost = 100
+collision_cost = 100.
 success_prob = 0.5
 
 value, policy = stochastic_value(grid, goal, cost_step, collision_cost, success_prob)
