@@ -44,6 +44,18 @@ goal = [2, 0]  # given in the form [row,col]
 cost = [2, 1, 20]  # cost has 3 values, corresponding to making
 
 
+grid = [[0, 0, 0, 0, 0, 0, 0],
+        [1, 1, 1, 1, 1, 1, 0],
+        [0, 1, 0, 0, 0, 1, 0],
+        [0, 1, 0, 1, 0, 1, 0],
+        [0, 1, 0, 1, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 0],
+        [0, 0, 0, 0, 0, 0, 0]]
+init = [0, 0, 3]
+goal = [4, 2]
+cost = [10, 40, 65]
+
+
 # a right turn, no turn, and a left turn
 
 # EXAMPLE OUTPUT:
@@ -63,6 +75,7 @@ def optimum_policy2D(grid, init, goal, cost):
 
     policy2D = [[' ' for items in xrange(len(grid[0]))] for row in xrange(len(grid))]
     values = [[[999 for items in xrange(len(grid[0]))] for row in xrange(len(grid))] for dir_idx in forward]
+    policy = [[[' ' for items in xrange(len(grid[0]))] for row in xrange(len(grid))] for dir_idx in forward]
     grid_max_row = len(grid) - 1
     grid_max_col = len(grid[0]) -1
 
@@ -70,10 +83,10 @@ def optimum_policy2D(grid, init, goal, cost):
         # For every direction of travel
     change = True
     round = 1
-    while change and round < 10:
+    while change:
         change = False
         round += 1
-        print "\nROUND: %d" % (round)
+        #print "\nROUND: %d" % (round)
         #print "change = False"
 
         #print "\nDIR: %s [%d]" % (forward_name[dir_idx], dir_idx)
@@ -106,41 +119,26 @@ def optimum_policy2D(grid, init, goal, cost):
                                 change = True
                                 #print "change = True"
                                 values[dir_idx][row][col] = new_value
-                                #policy2D[row][col] = action_name[a]
+                                policy[dir_idx][row][col] = action_name[a]
     row = init[0]
     col = init[1]
     curr_dir = init[2]
     policy2D[goal[0]][goal[1]] = '*'
 
     while row != goal[0] or col != goal[1]:
-        value = values[curr_dir][row][col]
-        lowest = 0
-        for a in xrange(len(action)):
-            test_dir = (curr_dir + action[a]) % 4
-            test_row = row + forward[test_dir][0]
-            test_col = col + forward[test_dir][1]
-            if test_row < 0 or test_col < 0 or test_row > grid_max_row or test_col > grid_max_col:
-                continue
-            test_value = values[test_dir][test_row][test_col]
-
-            if value == test_value + cost[a]:
-                policy2D[row][col] = action_name[a]
-                curr_dir = (curr_dir + action[a]) % 4
-                row = row + forward[curr_dir][0]
-                col = col + forward[curr_dir][1]
-                value = values[curr_dir][row][col]
-
-    #for i in range(len(values)):
-    #    print forward_name[i]
-    #    for rows in values[i]:
-    #        print rows
-
+        do = policy[curr_dir][row][col]
+        policy2D[row][col] = do
+        curr_dir = (curr_dir + action[action_name.index(do)]) % 4
+        row += forward[curr_dir][0]
+        col += forward[curr_dir][1]
+    #
+    # for i in range(len(values)):
+    #     print forward_name[i]
+    #     for row in values:
+    #         print row
+    #     print "\n"
     return policy2D
 
 print(optimum_policy2D(grid, init, goal, cost))
-#for i in range(len(values)):
-#    print forward_name[i]
-#for row in values:
-#    print row
-#print "\n"
+
 
