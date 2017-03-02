@@ -39,10 +39,20 @@ path = [[0, 0],
 def smooth(path, weight_data=0.5, weight_smooth=0.1, tolerance=0.000001):
     # Make a deep copy of path into newpath
     newpath = deepcopy(path)
+    # Kick off the loop.
+    delta = tolerance + 1.
 
-    #######################
-    ### ENTER CODE HERE ###
-    #######################
+    while delta > tolerance:
+        delta = 0.
+        for i in xrange(len(newpath)):
+            if i == 0 or i == len(path) - 1:
+                continue
+            for j in [0, 1]:
+                old_j_val = newpath[i][j]
+                newpath[i][j] += (path[i][j] - newpath[i][j]) * weight_data + \
+                                 (newpath[i - 1][j] + newpath[i + 1][j] - 2.0 * newpath[i][j]) * weight_smooth
+                delta += abs(newpath[i][j] - old_j_val)
+
 
     return newpath  # Leave this line for the grader!
 
