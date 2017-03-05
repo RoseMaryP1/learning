@@ -135,7 +135,7 @@ class robot:
 # run - does a single control run.
 
 
-def run(param1, param2, param3):
+def run(tau_p,tau_d, tau_i):
     myrobot = robot()
     myrobot.set(0.0, 1.0, 0.0)
     speed = 1.0  # motion distance is equal to speed (we assume time = 1)
@@ -145,6 +145,18 @@ def run(param1, param2, param3):
     #
     # Enter code here
     #
+    cte_p_last = myrobot.y - 0.
+    cte_i = 0.
+    for n in range(N):
+        cte_p = myrobot.y - 0.
+        cte_d = cte_p - cte_p_last
+        cte_i += cte_p
+        steering = - (tau_p * cte_p) - (tau_d * cte_d) - (tau_i * cte_i)
+        myrobot = myrobot.move(steering, speed)
+        cte_p_last = cte_p
+        print(myrobot, steering)
+
+
 
 
 # Call your function with parameters of (0.2, 3.0, and 0.004)
