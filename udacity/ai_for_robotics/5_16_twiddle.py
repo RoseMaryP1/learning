@@ -158,15 +158,33 @@ def run(params, printflag=False):
     return err / float(N)
 
 
-def twiddle(tol=0.2):  # Make this tolerance bigger if you are timing out!
+def twiddle(tol=0.00000000001):  # Make this tolerance bigger if you are timing out!
     ############## ADD CODE BELOW ####################
 
+    p = [0., 0., 0.]
+    dp = [1., 1., 1.]
+    decay = 0.9
 
-    # -------------
-    # Add code here
-    # -------------
+    best_err = run(p)
+    while best_err > tol:
+        for i in range(len(p)):
+            p[i] += dp[i]
+            err = run(p)
+            if err < best_err:
+                best_err = err
+                dp[i] *= 1.1
+            else:
+                p[i] -= 2 * dp[i]
+                err = run(p)
+                if err < best_err:
+                    best_err = err
+                    dp[i] *= -1.1
+                else:
+                    p[i] += dp[i]
+                    dp[i] *= 0.9
+        print best_err
 
-    return run(params)
+    return run(p, True)
 
-
+twiddle()
 
