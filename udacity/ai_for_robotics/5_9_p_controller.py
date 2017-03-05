@@ -136,7 +136,7 @@ class robot:
 # run - does a single control run
 
 
-def run(param):
+def run(tau):
     myrobot = robot()
     myrobot.set(0.0, 1.0, 0.0)
     speed = 1.0  # motion distance is equal to speed (we assume time = 1)
@@ -144,6 +144,15 @@ def run(param):
     #
     # Add Code Here
     #
+    crosstrack_error = myrobot.y
+    steering = -tau * crosstrack_error
+    for i in range(N):
+        step = myrobot.move(steering, speed)
+        myrobot.set(step.x, step.y, step.orientation)
+        crosstrack_error = myrobot.y
+        steering = -tau * crosstrack_error
+        print(myrobot, steering)
+
 
 
 
