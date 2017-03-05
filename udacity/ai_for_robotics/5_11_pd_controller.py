@@ -133,14 +133,26 @@ class robot:
 # run - does a single control run.
 
 
-def run(param1, param2):
+def run(tau_p, tau_d):
     myrobot = robot()
     myrobot.set(0.0, 1.0, 0.0)
+    #myrobot.set_steering_drift(10.)
     speed = 1.0  # motion distance is equal to speed (we assume time = 1)
     N = 100
     #
-    # Enter code here
+    # Add Code Here
     #
+
+    #cross track error (cte), assumes y=0
+    cte_last = myrobot.y - 0.
+    for i in range(N):
+        cte = myrobot.y - 0.
+        diff_cte = cte - cte_last
+        steering = - tau_p * cte - (tau_d * diff_cte) / 1.
+        myrobot = myrobot.move(steering, speed)
+        cte_last = cte
+        #print(cte, cte_last)
+        print(myrobot, steering)
 
 
 # Call your function with parameters of 0.2 and 3.0 and print results
