@@ -58,9 +58,25 @@ path = [[0, 0],
 #
 
 def smooth(path, weight_data=0.1, weight_smooth=0.1, tolerance=0.00001):
+    from copy import deepcopy
     #
     # Enter code here
     #
+    delta = tolerance + 1.
+    # First, I tried using a slice to copy, but since there are sublists, that doesn't work properly!!!
+    newpath = deepcopy(path)
+    while delta > tolerance:
+        delta = 0.
+        for i in range(len(newpath)):
+            last_i = (i - 1) % len(path)
+            next_i = (i + 1) % len(path)
+            #print("i=%d last_i=%d next_i=%d") % (i, last_i, next_i)
+            for j in range(len(path[0])):
+                old_j_val = newpath[i][j]
+                newpath[i][j] += ((path[i][j] - newpath[i][j]) * weight_data +
+                                 (newpath[last_i][j] + newpath[next_i][j] - (2.0 * newpath[i][j])) * weight_smooth)
+                delta += abs(old_j_val - newpath[i][j])
+        #print delta
 
     return newpath
 
@@ -102,6 +118,7 @@ def solution_check(newpath, answer):
         for j in range(len(newpath[0])):
             if not close_enough(newpath[i][j], answer[i][j]):
                 print 'Error, at least one of your entries is not correct.'
+                print(i, newpath[i], answer[i])
                 return False
     print "Test case correct!"
     return True
@@ -184,5 +201,5 @@ answer2 = [[1.2222234770374059, 0.4444422843711052],
            [0.44444210978390364, 1.2222211690821811],
            [0.8888882042812255, 0.8888870211766268]]
 
-# solution_check(smooth(testpath1), answer1)
-# solution_check(smooth(testpath2), answer2)
+#solution_check(smooth(testpath1), answer1)
+#solution_check(smooth(testpath2), answer2)
