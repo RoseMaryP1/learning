@@ -131,11 +131,24 @@ class robot:
     ############## ONLY ADD / MODIFY CODE BELOW THIS LINE ####################
 
     def cte(self, radius):
-        #
-        #
-        # Add code here
-        #
-        #
+        # normalize y by subtracting the radius (makes the math easier later).
+        y = self.y - radius
+        if self.x < radius:
+            # the left turn so normalize the circle center to the origin.
+            x = self.x - radius
+        elif self.x > (3 * radius):
+            # the right turn so normalize the circle center to the origin.
+            x = self.x - (3 * radius)
+        else:
+            # the straight aways (between left and right turns.)
+            if y > 0:
+                return y - radius
+            else:
+                # don't forget that we're going the opposite way at the bottom, so we need to negate the sign.
+                return - (y + radius)
+        # there are two ways to do this.. just get the x for a given y, but it would be more accurate to use pythagoras.
+        # if we find the length of our hypotenuse (minus our radius) then that should be the error.
+        cte = hypot(x, y) - radius
         return cte
 
 
