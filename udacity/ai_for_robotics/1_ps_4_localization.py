@@ -44,11 +44,37 @@
 #  [-1,0] - up
 
 def localize(colors, measurements, motions, sensor_right, p_move):
+    from copy import deepcopy
     # initializes p to a uniform distribution over a grid of the same dimensions as colors
     pinit = 1.0 / float(len(colors)) / float(len(colors[0]))
     p = [[pinit for row in range(len(colors[0]))] for col in range(len(colors))]
 
-    # >>> Insert your code here <<<
+    def sense(p, colors, Z):
+        q = deepcopy(p)
+        for i in range(len(p)):
+            for j in range(len(p[0])):
+                hit = (Z == colors[i][j])
+                q[i][j] *= hit * sensor_right + (1 - hit) * (1 - sensor_right)
+        total = sum(sum(q, []))
+        for i in range(len(p)):
+            for j in range(len(p[0])):
+                q[i][j] /= total
+        return q
+
+    def move(p, U):
+        q = deepcopy(p)
+        for i in range(len(p)):
+            for j in range(len(p[0])):
+                # chance we moved.
+                s = p_move * p[(i - U[0]) % len(p)][(j - U[1]) % len(p[0])]
+                # change we stayed still.
+                s += (1-p_move) * p[i][j]
+                q[i][j] = s
+        return q
+
+    for i in range(len(motions)):
+        p = move(p, motions[i])
+        p = sense(p, colors, measurements[i])
 
     return p
 
