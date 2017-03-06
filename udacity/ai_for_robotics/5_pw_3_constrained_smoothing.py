@@ -23,6 +23,31 @@ def smooth(path, fix, weight_data=0.0, weight_smooth=0.1, tolerance=0.00001):
     # Enter code here.
     # The weight for each of the two new equations should be 0.5 * weight_smooth
     #
+    from copy import deepcopy
+    newpath = deepcopy(path)
+    delta = tolerance + 1.
+    while delta > tolerance:
+        delta = 0.
+        for i in range(len(path)):
+            if fix[i] == 1:
+                continue
+            i_prev = (i - 1) % len(path)
+            i_prev2 = (i - 2) % len(path)
+            i_next = (i + 1) % len(path)
+            i_next2 = (i + 2) % len(path)
+            for j in range(len(path[0])):
+                old_j = newpath[i][j]
+                newpath[i][j] += weight_data * (path[i][j] - newpath[i][j]) \
+                                + weight_smooth * (newpath[i_prev][j] + newpath[i_next][j] - 2.0 * newpath[i][j]) \
+                                + weight_smooth / 2.0 * (2.0 * newpath[i_prev][j] - newpath[i_prev2][j] - newpath[i][j]) \
+                                + weight_smooth / 2.0 * (2.0 * newpath[i_next][j] - newpath[i_next2][j] - newpath[i][j])
+
+                # Seems we can simplify the math above by cancelling things out.
+                # newpath[i][j] = weight_smooth * \
+                #                ((newpath[i_prev][j] + newpath[i_next][j] - 2.0 * newpath[i][j])
+                #                 + (newpath[i_prev][j] - newpath[i_prev2][j] - newpath[i][j])
+                #                 + (newpath[i_next][j] - newpath[i_next2][j] - newpath[i][j]))
+                delta += abs(newpath[i][j] - old_j)
 
     return newpath
 
