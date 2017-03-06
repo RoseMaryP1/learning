@@ -6,13 +6,19 @@ reserved words
 * `next` is a reserved word that calls a class's  __next__() iterator method, use `next_` instead for naming in say 
   linked lists.
 
+copying
+---------
+* Be careful copying!!
+* itemA = itemB doesn't make a copy if it's mutable as everything but integers and strings are, it just assigns label itemA to point to the same thing that itemB points to.
+* To copy a (SHALLOW) list, you can use a slice like so.. listA = listB[:], but that doesn't work if the items of the list are immutable. In that case, you need to use a deepcopy() which can be imported from the 'copy' module.
+
 
 basics
 -------
 * Doc comments use set of triple quotes (`"""`) AFTER the beginning of the function
 * use `is not None` and not something like `not None` or `!= None`
 * you can only chain things if he method returns something like `self`.. ie. `Node("A").append("B").append("C")`
-
+* Comments use `#`, and NOT `//` or `/*`
 
 classes
 --------
