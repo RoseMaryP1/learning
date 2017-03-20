@@ -1,0 +1,6 @@
+ahoyapi: v2
+commands:
+  up:
+    cmd: nvidia-docker run --rm -it -p 8888:8888 -p 6006:6006 --name tf-gpu -v `pwd`:/notebooks tensorflow/tensorflow:latest-gpu-py3
+  bash:
+    cmd: docker exec -it tf-gpu bash
