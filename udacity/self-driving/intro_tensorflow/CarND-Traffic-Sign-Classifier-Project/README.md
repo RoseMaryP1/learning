@@ -127,7 +127,7 @@ I also added a sign that isn't a german road sign out of curiosity.
 
 ![stairs](./web_images/4.png)
 
-The first image might be difficult to classify because the image is slightly askew.
+The 120 km/hr image might be difficult to classify because the image is slightly askew, and the 60 km/hr has a bit of a shadow across the sign.
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. Identify where in your code predictions were made. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -144,7 +144,7 @@ Here are the results of the prediction:
 | 60 km/h			    | end of 80 km/hr     							|
 
 
-The model was able to correctly guess 3 of the 5 traffic signs, which gives an accuracy of 40%. This is lower than the test set of 93%
+The model was able to correctly guess 3 of the 5 traffic signs, which gives an accuracy of 60%. This is lower than the test set of 93%
 
 #### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction and identify where in your code softmax probabilities were outputted. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
