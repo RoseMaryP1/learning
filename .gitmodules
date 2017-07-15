@@ -7,4 +7,9 @@
 [submodule "udacity/self-driving/CarND-Advanced-Lane-Lines"]
 	path = udacity/self-driving/CarND-Advanced-Lane-Lines
 	url = git@github.com:frankcarey/CarND-Advanced-Lane-Lines.git
-
+[submodule "udacity/self-driving/CarND-Behavioral-Cloning-P3"]
+	path = udacity/self-driving/CarND-Behavioral-Cloning-P3
+	url = git@github.com:frankcarey/CarND-Behavioral-Cloning-P3.git
+[submodule "udacity/self-driving/CarND-LaneLines-P1"]
+	path = udacity/self-driving/CarND-LaneLines-P1
+	url = git@github.com:frankcarey/CarND-LaneLines-P1.git
