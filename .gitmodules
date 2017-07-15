@@ -1,3 +1,6 @@
 [submodule "udacity/self-driving/CarND-Advanced-Lane-Lines"]
 	path = udacity/self-driving/CarND-Advanced-Lane-Lines
 	url = git@github.com:frankcarey/CarND-Advanced-Lane-Lines.git
+[submodule "udacity/self-driving/CarND-TensorFlow-Lab"]
+	path = udacity/self-driving/CarND-TensorFlow-Lab
+	url = git@github.com:frankcarey/CarND-TensorFlow-Lab.git
